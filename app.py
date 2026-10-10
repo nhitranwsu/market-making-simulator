@@ -84,7 +84,7 @@ sim.full_spread = full_spread
 if speed < 4:
     interval, ticks_per_refresh = 1.0 / speed, 1
 else:
-    interval, ticks_per_refresh = 0.3, int(round(speed * 0.3))
+    interval, ticks_per_refresh = 0.5, int(round(speed * 0.5))
 
 # ---------------------------------------------------------------------- header
 c_brand, c_view = st.columns([4, 1.6], vertical_alignment="center")
@@ -114,6 +114,7 @@ def live():
 
         left, right = st.columns([2.4, 1], gap="medium")
         with left:
+            st.markdown(ui.legend_html(), unsafe_allow_html=True)
             st.plotly_chart(ui.live_chart(sim, window, inv_limit), theme=None, width="stretch", config=PLOT_CFG)
         with right:
             # Fills from the latest refresh flash in the ladder and the trade list

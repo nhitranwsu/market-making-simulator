@@ -53,8 +53,18 @@ _CSS_BODY = """
 .prog { height: 2px; background: var(--line); margin-bottom: 10px; }
 .prog i { display: block; height: 100%; background: var(--ink2); }
 
+
+/* chart legend, rendered as HTML so it never wraps over the panel labels */
+.leg { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: center; background: var(--panel); border: 1px solid var(--line);
+       border-bottom: 0; border-radius: 6px 6px 0 0; padding: 9px 14px 2px; margin-bottom: -1rem; color: var(--ink2); font-size: 12px; }
+.leg span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.leg i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.leg i.dot { border-top: 2px dotted; }
+.leg b { display: inline-block; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; }
+.leg b.up { border-bottom: 9px solid; } .leg b.dn { border-top: 9px solid; }
+
 /* KPI strip */
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line);
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line);
         border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
 .kpi { background: var(--panel); padding: 11px 15px 12px; min-width: 0; }
 .kpi .l { color: var(--muted); font-size: 12px; }
@@ -249,6 +259,18 @@ def blotter_html(fills, new_after_tick, n=10):
     return f'<div class="tm blot"><table>{head}{body}</table></div>'
 
 
+def legend_html():
+    items = [
+        ('<i style="border-color:%s"></i>' % C["ink"], "Mid"),
+        ('<i class="dot" style="border-color:%s"></i>' % C["res"], "Reservation"),
+        ('<i style="border-color:%s"></i>' % C["bid"], "Bid quote"),
+        ('<i style="border-color:%s"></i>' % C["ask"], "Ask quote"),
+        ('<b class="up" style="border-bottom-color:%s"></b>' % C["bid"], "Buy fill"),
+        ('<b class="dn" style="border-top-color:%s"></b>' % C["ask"], "Sell fill"),
+    ]
+    return '<div class="tm leg">' + "".join(f"<span>{m}{t}</span>" for m, t in items) + "</div>"
+
+
 # ------------------------------------------------------------------------- figures
 def _style(fig, height, margin):
     fig.update_layout(
@@ -337,7 +359,8 @@ def live_chart(sim, window, inv_limit):
                   annotation_text="input σ", annotation_position="top right",
                   annotation_font=dict(size=11, color=C["muted"]))
 
-    _style(fig, 920, dict(l=56, r=74, t=36, b=48))
+    _style(fig, 900, dict(l=56, r=74, t=26, b=48))
+    fig.update_layout(showlegend=False, uirevision="live")
     fig.update_xaxes(range=[lo * sim.dt, (lo + window) * sim.dt], tickformat=".3f",
                      showspikes=True, spikemode="across", spikesnap="cursor", spikecolor=C["axis"], spikethickness=1)
     fig.update_xaxes(title_text="Session time", title_font=dict(size=12, color=C["muted"]), row=4, col=1)
