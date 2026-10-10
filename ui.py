@@ -56,7 +56,7 @@ _CSS_BODY = """
 
 /* chart legend, rendered as HTML so it never wraps over the panel labels */
 .leg { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: center; background: var(--panel); border: 1px solid var(--line);
-       border-bottom: 0; border-radius: 6px 6px 0 0; padding: 9px 14px 2px; margin-bottom: -1rem; color: var(--ink2); font-size: 12px; }
+       border-radius: 6px; padding: 8px 14px; margin: 0; color: var(--ink2); font-size: 12px; }
 .leg span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
 .leg i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
 .leg i.dot { border-top: 2px dotted; }
