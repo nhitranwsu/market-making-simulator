@@ -3,7 +3,7 @@ import streamlit as st
 import ui
 from engine import AvellanedaStoikovSimulator, run_batch
 
-st.set_page_config(page_title="Quoting engine", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Quoting engine | Nhi Q Tran", layout="wide", initial_sidebar_state="expanded")
 st.markdown(ui.css(), unsafe_allow_html=True)
 
 STRATEGIES = ["Avellaneda and Stoikov (inventory skew)", "Symmetric around the mid (benchmark)"]
@@ -44,6 +44,7 @@ if "sim" not in st.session_state:
 
 # ----------------------------------------------------------------------- sidebar
 with st.sidebar:
+    st.markdown(ui.author_html(), unsafe_allow_html=True)
     st.button("Pause" if st.session_state.running else "Play", on_click=on_toggle,
               type="primary", width="stretch")
     c1, c2 = st.columns(2)
@@ -192,3 +193,4 @@ def model():
 
 
 {"Live": live, "Analytics": analytics, "Model": model}[view]()
+st.markdown(ui.foot_html(), unsafe_allow_html=True)
